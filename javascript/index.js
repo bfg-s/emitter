@@ -1,3 +1,7 @@
+if (window.Alpine) {
+    throw "This extension must be initialized before Alpine.";
+}
+
 const metaPrefix = document.querySelector(`meta[name=emitter-prefix]`);
 const token = document.head.querySelector('meta[name=csrf-token]');
 const queryState = {};
@@ -114,3 +118,9 @@ window.VueMessageMutator = {
         }
     }
 };
+
+document.addEventListener('alpine:init', () => {
+    window.Alpine.magic('message', () => (...attrs) => {
+        return window.$message(...attrs);
+    });
+});

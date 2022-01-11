@@ -19,7 +19,7 @@ For using with any guard use:
 
 ## Blade
 ```html
-@emitterScripts($options);
+@emitterScripts();
 <!-- OR --->
 @emitterScripts($options);
 ```
@@ -58,6 +58,30 @@ Event search occurs on the following pattern:
 ### VueJs Mixin
 ```javascript
 Vue.mixin(VueMessageMutator);
+```
+### AlpineJs
+Messages are supported by AlpineJS by default.
+
+## Event protection
+You can create a method with the name `access` in the event class, which is executed before performing an event, but after its design.
+```php
+    ...
+    public function access() {
+        return \Auth::check() && \Auth::user()->isAdmin()
+    } 
+    ...
+```
+
+## Resource wrapping
+You can declare a property or method named `resource`, he must return the resource class that needs to be applied to the last truthful listener's result.
+```php
+    ...
+    public $resource = UserResource::class; 
+    // OR
+    public function resource() {
+        return UserResource::class;
+    } 
+    ...
 ```
 
 ## Changelog

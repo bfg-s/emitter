@@ -20,24 +20,27 @@ class MessageController
             ->map(function ($i) { return ucfirst($i); })
             ->join('\\');
 
-        $results = [];
+        $lastResult = null;
 
         foreach (LaravelHooks::getEvents() as $eventClass) {
             if (\Str::is($eventPattern, $eventClass) || \Str::is($eventPattern . "Event", $eventClass)) {
                 foreach (array_filter($this->callEvent($eventClass, $request)) as $result) {
-                    if (is_array($result) && !isset($result[0])) {
-                        $results = array_merge($results, $result);
-                    }
+                    $lastResult = $result ?: $lastResult;
                 }
             }
         }
 
-        if ($this->resource) {
+        if (is_callable($lastResult)) {
 
-            $results = $this->resource::make($results);
+            $lastResult = call_user_func($lastResult);
         }
 
-        return $results;
+        if ($this->resource && $lastResult) {
+
+            $lastResult = $this->resource::make($lastResult);
+        }
+
+        return $lastResult;
     }
 
     protected function callEvent(string $class, Request $request)
