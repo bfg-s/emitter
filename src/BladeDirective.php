@@ -27,7 +27,7 @@ class BladeDirective
     {
         $class = static::class;
         return <<<HTML
-<script src="<?php echo asset('vendor/emitter/emitter.js'); ?>" defer></script>
+<script src="<?php echo asset('vendor/emitter/emitter.js'); ?>"></script>
 <script type='text/javascript'><?php echo \\$class::jsInstanceGenerator($expression); ?></script>
 HTML;
     }
